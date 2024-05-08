@@ -12,7 +12,7 @@ class NewsTableCell: UITableViewCell {
 
     public  static var  identifier = "NewsTableCell"
     
-    var news : News!
+    var news : Datum!
     var headline = UILabel()
     var date = UILabel()
     var content = UILabel()
@@ -33,12 +33,12 @@ class NewsTableCell: UITableViewCell {
     }
     
    
-    func set(with news : News)
+    func set(with news : Datum)
     {
         self.news = news
         headline.text = self.news.title
-        content.text = self.news.content
-        date.text = self.news.date.convertFormattedDate()
+        //content.text = self.news.content
+        //date.text = self.news.date.convertFormattedDate()
        
             Task{
                 do{

@@ -13,7 +13,7 @@ class FeedVC: UIViewController
 {
     
     var newsTable = UITableView()
-    var news : [News] = []
+    var news : NewsAPI?
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -30,6 +30,8 @@ class FeedVC: UIViewController
             }
           
         }
+        
+        
         // Do any additional setup after loading the view.
     }
     
@@ -48,8 +50,19 @@ class FeedVC: UIViewController
 
     func fetchNews()
     {
-        news = NetworkManager.shared.getNews()
-        newsTable.reloadData()
+        Task
+        {
+            do{
+                news = try await NetworkManager.shared.getNewsWithUrl()
+                dump(news)
+                newsTable.reloadData()
+            }
+            catch{
+                
+            }
+         
+
+        }
     }
 
 }
@@ -57,25 +70,27 @@ class FeedVC: UIViewController
 extension FeedVC : UITableViewDelegate , UITableViewDataSource
 {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        news.count
+        news?.data.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableCell.identifier, for: indexPath) as? NewsTableCell else {return UITableViewCell()}
-        cell.set(with: news[indexPath.row])
+        guard let newsapi = news else {return UITableViewCell()}
+        print("hakantrkmn")
+        cell.set(with: newsapi.data[indexPath.row])
         cell.selectionStyle = .none
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        
-
-        let vc = NewsDetailVC()
-        vc.news = news[indexPath.row]
-        navigationController?.pushViewController(vc, animated: true)
-
-    }
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        tableView.deselectRow(at: indexPath, animated: true)
+//        
+//
+//        let vc = NewsDetailVC()
+//        vc.news = news[indexPath.row]
+//        navigationController?.pushViewController(vc, animated: true)
+//
+//    }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100

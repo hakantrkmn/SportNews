@@ -40,19 +40,19 @@ class NewsDetailVC: UIViewController
     {
         headline.text = self.news.title
         content.text = self.news.content
-        if(image.image == nil)
-        {
-            Task{
-                do{
-                    image.image = try await NetworkManager.shared.getImage(for: news)
-                    print("hakan")
-                }
-                catch{
-                    print("sıkıntı  var")
-                }
-
-            }
-        }
+//        if(image.image == nil)
+//        {
+//            Task{
+//                do{
+//                    image.image = try await NetworkManager.shared.getImage(for: news)
+//                    print("hakan")
+//                }
+//                catch{
+//                    print("sıkıntı  var")
+//                }
+//
+//            }
+//        }
         
         headline.font = .systemFont(ofSize: 15, weight: .heavy)
         content.numberOfLines = 0

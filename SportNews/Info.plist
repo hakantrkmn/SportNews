@@ -3,16 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>NSUserTrackingUsageDescription</key>
-	<string>Please allow so we can serve you personalized ads.
-
-
-Please allow so we can serve you personalized ads.
-
-
-&quot;Please allow so we can serve you personalized ads.
-
-
-</string>
+	<string>This identifier will be used to deliver personalized ads to you.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

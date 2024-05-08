@@ -19,15 +19,69 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = createNavigation(view: FeedVC())
+        window.rootViewController = createTabBar()
         self.window = window
         window.makeKeyAndVisible()
     }
     
-    func createNavigation(view : UIViewController) -> UINavigationController
+    func createTabBar() -> UITabBarController
     {
-        var nav = UINavigationController(rootViewController: view)
-        return nav
+        let tabBar = UITabBarController()
+        tabBar.viewControllers = [createFeedVC(),createSearchVC(),createGroupsVC(),createGuessVC(),createHangmanVC()]
+        
+        return tabBar
+    }
+    
+    func createFeedVC() -> UINavigationController
+    {
+        let nav = FeedVC()
+        nav.title = "News"
+        nav.tabBarItem = UITabBarItem(title: "News", image: UIImage(systemName: "newspaper"), tag: 0)
+        nav.tabBarController?.title = "News"
+        return UINavigationController(rootViewController: nav)
+    }
+    
+    func createHangmanVC() -> UINavigationController
+    {
+        let nav = HangmanVC()
+        nav.title = "Hangman"
+        nav.tabBarItem = UITabBarItem(title: "Hangman", image: UIImage(systemName: "figure.stand"), tag: 5)
+        nav.tabBarController?.title = "Hangman"
+        return UINavigationController(rootViewController: nav)
+    }
+    
+    func createGuessVC() -> UINavigationController
+    {
+        let nav = GuessPlayerVC()
+        nav.title = "Guess"
+        nav.tabBarItem = UITabBarItem(title: "Guess", image: UIImage(systemName:  "questionmark.circle.fill"), tag: 4)
+        nav.tabBarController?.title = "Guess"
+        return UINavigationController(rootViewController: nav)
+    }
+    func createSearchClubVC() -> UINavigationController
+    {
+        let nav = SearchClubVC()
+        nav.title = "Search Club"
+        nav.tabBarItem = UITabBarItem(title: "Search Club", image: UIImage(systemName: "diamond"), tag: 2)
+        nav.tabBarController?.title = "Search Club"
+        return UINavigationController(rootViewController: nav)
+    }
+    
+    func createGroupsVC() -> UINavigationController
+    {
+        let nav = GroupsVC()
+        nav.title = "Groups"
+        nav.tabBarItem = UITabBarItem( title: "Groups" ,image: UIImage(systemName: "book"), tag: 3)
+        nav.tabBarController?.title = "Groups"
+        return UINavigationController(rootViewController: nav)
+    }
+    func createSearchVC() -> UINavigationController
+    {
+        let nav = SearchVC()
+        nav.title = "Search Player"
+        nav.tabBarItem = UITabBarItem( title: "Search Player" ,image: UIImage(systemName: "person"), tag: 1)
+        nav.tabBarController?.title = "Search Player"
+        return UINavigationController(rootViewController: nav)
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
