@@ -13,6 +13,13 @@ import AppTrackingTransparency
 class HomeVC: UIViewController {
     
     let containerView = UIView()
+    let shareButton : UIButton = {
+        var btn = UIButton()
+        btn.setTitle("Share", for: .normal)
+        //btn.setTitleColor(.orange, for: .normal)
+        btn.titleLabel?.font = .systemFont(ofSize: 20,weight: .bold)
+        return btn
+    }()
     
     let picker = UIPickerView()
     var scoreBoard = ScoreBoardVC()
@@ -64,7 +71,10 @@ class HomeVC: UIViewController {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         view.addGestureRecognizer(tapGestureRecognizer)
         
-       
+        shareButton.addTarget(self, action: #selector(shareTap), for: .touchUpInside)
+        
+        view.bringSubviewToFront(shareButton)
+
     }
     
     @objc func handleTap(_ sender: UITapGestureRecognizer) {
@@ -110,7 +120,7 @@ class HomeVC: UIViewController {
     
     func setUI()
     {
-        view.addSubiews(views: containerView)
+        view.addSubiews(views: containerView,shareButton)
         containerView.addSubiews(views: appName,scoreBoard,AwayLeagueTextField,HomeLeagueTextField)
 
         
@@ -133,7 +143,12 @@ class HomeVC: UIViewController {
             make.bottom.equalTo(containerView.snp.bottom)
         }
         
-      
+        shareButton.snp.makeConstraints { make in
+            make.bottom.equalTo(view.safeAreaLayoutGuide)
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            make.centerX.equalTo(view)
+            make.height.equalTo(75)
+        }
 
         
         HomeLeagueTextField.snp.makeConstraints { make in
@@ -160,6 +175,7 @@ class HomeVC: UIViewController {
         AwayLeagueTextField.layer.borderWidth = 1
         AwayLeagueTextField.layer.borderColor = UIColor.label.cgColor
 
+        shareButton.backgroundColor = .systemGreen
     }
     
 }
