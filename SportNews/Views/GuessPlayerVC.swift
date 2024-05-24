@@ -19,7 +19,7 @@ class GuessPlayerVC: UIViewController {
     
     var guessButton = UIButton()
     
-    let players = ["ronaldo","messi","martinez","lewandowski","grealish","foden","arda","mbappe","griezmann"]
+    let players = ["ronaldo","messi","martinez","lewandowski","grealish","foden","mbappe","griezmann"]
     var lastPlayer = ""
     override func viewDidLoad() {
         super.viewDidLoad()
