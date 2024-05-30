@@ -1,0 +1,32 @@
+[
+  {
+    "question": "Which country won the FIFA World Cup in 2018?",
+    "options": ["Brazil", "Germany", "France", "Argentina"],
+    "correctAnswer": 2,
+    "image" : "birinci"
+  },
+  {
+    "question": "Who is known as the 'King of Football'?",
+    "options": ["Lionel Messi", "Cristiano Ronaldo", "Pelé", "Diego Maradona"],
+    "correctAnswer": 2,
+    "image" : "ikinci"
+  },
+  {
+    "question": "Which club won the UEFA Champions League in 2020?",
+    "options": ["Liverpool", "Bayern Munich", "PSG", "Real Madrid"],
+    "correctAnswer": 1,
+    "image" : "ucuncu"
+  },
+  {
+    "question": "Who won the Ballon d'Or in 2021?",
+    "options": ["Lionel Messi", "Robert Lewandowski", "Karim Benzema", "Jorginho"],
+    "correctAnswer": 0,
+    "image" : "dort"
+  },
+  {
+    "question": "Which country hosted the 2014 FIFA World Cup?",
+    "options": ["South Africa", "Brazil", "Russia", "Germany"],
+    "correctAnswer": 1,
+    "image" : "bes"
+  }
+]

@@ -1,88 +1,61 @@
-//
-//  NewsVC.swift
-//  SportNews
-//
-//  Created by Hakan Türkmen on 11.05.2024.
-//
-
 import UIKit
 
-class NewsVC: UIViewController {
-
-    var newsTable = UITableView()
-    var news : [News] = []
+class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    private let tableView = UITableView()
+    private let viewModel = NewsViewModel()
     
-    let refreshControl = UIRefreshControl()
-    let loadingIndicator = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50))
-
-    override func viewDidLoad()
-    {
+    override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationController?.navigationBar.prefersLargeTitles = true
+        tabBarController?.tabBar.backgroundColor = .systemGroupedBackground
+        
+        
+        title = "News"
         view.backgroundColor = .systemBackground
-        newsTable.delegate = self
-        newsTable.dataSource = self
-        newsTable.register(NewsCell.self, forCellReuseIdentifier: NewsCell.idetifier)
-        setUI()
-        loadingIndicator.hidesWhenStopped = true
-        loadingIndicator.style = UIActivityIndicatorView.Style.large
-        loadingIndicator.startAnimating()
-        view.addSubview(loadingIndicator)
-        Task{
-            news = try await NetworkManager.shared.fetchData(at: URL(string: "https://footballnewsapi.netlify.app/.netlify/functions/api/news/onefootball")!)
-            newsTable.reloadData()
-            loadingIndicator.stopAnimating()
-        }
-        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
-           refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
-           newsTable.addSubview(refreshControl) // not required when using UITableViewController
-
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(NewsCell.self, forCellReuseIdentifier: NewsCell.identifier)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(tableView)
+        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        
+        fetchNews()
+        
     }
     
+   
     
-    @objc func refresh(_ sender: AnyObject) {
-        Task{
-            news = try await NetworkManager.shared.fetchData(at: URL(string: "https://footballnewsapi.netlify.app/.netlify/functions/api/news/onefootball")!)
-            newsTable.reloadData()
-            refreshControl.endRefreshing()
+    private func fetchNews() {
+        viewModel.fetchNews {
+            self.tableView.reloadData()
         }
     }
     
-    func setUI()
-    {
-        view.addSubiews(views: newsTable,loadingIndicator)
-        loadingIndicator.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-        }
-        newsTable.snp.makeConstraints { make in
-            make.edges.equalTo(view.safeAreaLayoutGuide)
-        }
-    }
-
- 
-
-}
-extension NewsVC : UITableViewDelegate,UITableViewDataSource
-{
+    // MARK: - UITableViewDataSource
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let url = URL(string: news[indexPath.row].url) {
-            UIApplication.shared.open(url)
-        }
-    }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        news.count
+        return viewModel.newsItems.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsCell.idetifier, for: indexPath) as? NewsCell else  {return UITableViewCell()}
-        
-        cell.set(with: news[indexPath.row])
+        let cell = tableView.dequeueReusableCell(withIdentifier: NewsCell.identifier, for: indexPath) as! NewsCell
+        let newsItem = viewModel.newsItems[indexPath.row]
+        cell.configure(with: newsItem)
         return cell
     }
     
+    // MARK: - UITableViewDelegate
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
+        return 350 // Adjusted for link preview height and padding
     }
-    
-    
 }

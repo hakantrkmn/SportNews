@@ -1,62 +1,70 @@
-//
-//  NewsCell.swift
-//  SportNews
-//
-//  Created by Hakan Türkmen on 11.05.2024.
-//
-
 import UIKit
+import LinkPresentation
 
 class NewsCell: UITableViewCell {
-
-    static let idetifier = "NewsCell"
+    static let identifier = "NewsCell"
     
-    var img = UIImageView()
-    var titleLabel = UILabel()
+    private let linkPreview: LPLinkView = {
+        let view = LPLinkView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        label.numberOfLines = 2
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     
-    func set(with news : News)
-    {
-        Task{
-            do{
-                print("hakan")
-                img.image = try await NetworkManager.shared.fetchImage(at: URL(string: news.img)!)
-                titleLabel.text = news.title
-            }
-            catch{
-                print(error)
-            }
-
-        }
-    }
+    private let sectionLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        label.textColor = .secondaryLabel
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        img.contentMode = .scaleAspectFit
-
-        setUI()
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(sectionLabel)
+        contentView.addSubview(linkPreview)
         
+        NSLayoutConstraint.activate([
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
+            
+            sectionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 5),
+            sectionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
+            sectionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
+            
+            linkPreview.topAnchor.constraint(equalTo: sectionLabel.bottomAnchor, constant: 10),
+            linkPreview.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
+            linkPreview.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
+            linkPreview.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
+            linkPreview.heightAnchor.constraint(equalToConstant: 280)
+        ])
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setUI()
-    {
-        contentView.addSubiews(views: img,titleLabel)
+    func configure(with newsItem: NewsItem) {
+        titleLabel.text = newsItem.webTitle
+        sectionLabel.text = newsItem.sectionName
         
-        
-        img.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(10)
-            make.top.bottom.equalToSuperview().inset(10)
-            make.width.equalTo(100)
-        }
-        
-        titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(img.snp.trailing).offset(10)
-            make.bottom.trailing.top.equalToSuperview().inset(10)
+        if let url = URL(string: newsItem.webUrl) {
+            let provider = LPMetadataProvider()
+            provider.startFetchingMetadata(for: url) { metadata, error in
+                guard let data = metadata, error == nil else { return }
+                DispatchQueue.main.async {
+                    self.linkPreview.metadata = data
+                }
+            }
         }
     }
-
 }

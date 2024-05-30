@@ -24,15 +24,17 @@ class GuessPlayerVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        navigationController?.navigationBar.prefersLargeTitles = true
         imageView.contentMode = .scaleAspectFit
         picker.delegate = self
         picker.dataSource = self
         setUI()
         guessText.layer.borderWidth = 1
+        guessText.layer.borderColor = UIColor.secondarySystemBackground.cgColor
         guessText.inputView = picker
         guessText.tintColor = .clear
         guessLabel.text = "Guess The Player"
-        guessLabel.font = .systemFont(ofSize: 20)
+        guessLabel.font = .systemFont(ofSize: 30,weight: .bold)
         guessLabel.textAlignment = .center
         
         guessButton.setTitle("Guess", for: .normal)
@@ -51,8 +53,11 @@ class GuessPlayerVC: UIViewController {
         view.addGestureRecognizer(tapGestureRecognizer)
         
         guessButton.addTarget(self, action: #selector(guessTapped), for: .touchUpInside)
+        
+       
     }
     
+   
     @objc func guessTapped()
     {
             if guessText.text?.uppercased() == lastPlayer.uppercased()
@@ -99,7 +104,7 @@ class GuessPlayerVC: UIViewController {
         view.addSubiews(views: imageView,guessText,guessLabel,guessButton)
         
         imageView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
+            make.top.equalTo(view.snp.centerY).offset(-view.frame.height / 4)
             make.leading.trailing.equalToSuperview().inset(20)
             make.height.equalTo(200)
         }
@@ -112,12 +117,13 @@ class GuessPlayerVC: UIViewController {
         guessText.snp.makeConstraints { make in
             make.top.equalTo(guessLabel.snp.bottom).offset(20)
             make.leading.trailing.equalToSuperview().inset(100)
+            make.height.equalTo(40)
         }
         
         guessButton.snp.makeConstraints { make in
-            make.top.equalTo(guessText.snp.bottom).offset(50)
-            make.height.equalTo(50)
-            make.width.equalTo(90)
+            make.top.equalTo(guessText.snp.bottom).offset(80)
+            make.height.equalTo(70)
+            make.width.equalTo(130)
             make.centerX.equalToSuperview()
         }
     }

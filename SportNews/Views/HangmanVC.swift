@@ -7,6 +7,8 @@ class HangmanVC: UIViewController {
     var takeLetterButton: UIButton!
     var takeHintButton: UIButton!
     
+    var hangImage = UIImageView()
+    
     var footballPlayers = ["MESSI", "RONALDO", "NEYMAR", "MBAPPE", "HAZARD", "SALAH", "LEWANDOWSKI", "DE BRUYNE", "KANE", "HAALAND", "NEYMAR", "SUAREZ", "MODRIC", "NEYMAR", "GRIEZMANN", "VAN DIJK", "RAMOS", "SANE", "OBLAK", "KROOS", "FIRMINO", "STERLING", "DE JONG", "CASILLAS", "INIESTA", "MANE", "DE GEA", "ALISSON", "AUBAMEYANG", "POGBA"]
     var currentWord: String!
     var guessedLetters = [Character]()
@@ -17,9 +19,19 @@ class HangmanVC: UIViewController {
         setupUI()
         startNewGame()
         inputTextField.delegate = self
+        
+        navigationController?.navigationBar.prefersLargeTitles = true
+        
+
+        hangImage.image = UIImage(named: "hang")
+        hangImage.contentMode = .scaleAspectFill
     }
     
+ 
+    
     func setupUI() {
+        
+       
         // Hangman Word Label
         hangmanWordLabel = UILabel()
         hangmanWordLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -40,33 +52,43 @@ class HangmanVC: UIViewController {
         
         NSLayoutConstraint.activate([
             inputTextField.topAnchor.constraint(equalTo: hangmanWordLabel.bottomAnchor, constant: 20),
-            inputTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            inputTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+            inputTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: view.frame.width/5),
+            inputTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -view.frame.width/5)
         ])
         
         // Take Letter Button
         takeLetterButton = UIButton(type: .system)
-        takeLetterButton.translatesAutoresizingMaskIntoConstraints = false
-        takeLetterButton.setTitle("Guess", for: .normal)
-        takeLetterButton.addTarget(self, action: #selector(takeLetterButtonTapped), for: .touchUpInside)
-        view.addSubview(takeLetterButton)
-        
-        NSLayoutConstraint.activate([
-            takeLetterButton.topAnchor.constraint(equalTo: inputTextField.bottomAnchor, constant: 20),
-            takeLetterButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20)
-        ])
-        
-        // Take Hint Button
-        takeHintButton = UIButton(type: .system)
-        takeHintButton.translatesAutoresizingMaskIntoConstraints = false
-        takeHintButton.setTitle("Take a Letter", for: .normal)
-        takeHintButton.addTarget(self, action: #selector(takeHintButtonTapped), for: .touchUpInside)
-        view.addSubview(takeHintButton)
-        
-        NSLayoutConstraint.activate([
-            takeHintButton.topAnchor.constraint(equalTo: inputTextField.bottomAnchor, constant: 20),
-            takeHintButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
-        ])
+           takeLetterButton.translatesAutoresizingMaskIntoConstraints = false
+           takeLetterButton.setTitle("Guess", for: .normal)
+           takeLetterButton.setTitleColor(.black, for: .normal)
+           takeLetterButton.backgroundColor = .green // Set green background color
+           takeLetterButton.layer.cornerRadius = 8 // Add rounded corners
+           takeLetterButton.addTarget(self, action: #selector(takeLetterButtonTapped), for: .touchUpInside)
+           view.addSubview(takeLetterButton)
+           
+           NSLayoutConstraint.activate([
+               takeLetterButton.topAnchor.constraint(equalTo: inputTextField.bottomAnchor, constant: 20),
+               takeLetterButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: view.frame.width/5),
+               takeLetterButton.widthAnchor.constraint(equalToConstant: 120), // Set button width
+               takeLetterButton.heightAnchor.constraint(equalToConstant: 40) // Set button height
+           ])
+           
+           // Take Hint Button
+           takeHintButton = UIButton(type: .system)
+           takeHintButton.translatesAutoresizingMaskIntoConstraints = false
+           takeHintButton.setTitle("Take a Letter", for: .normal)
+           takeHintButton.setTitleColor(.black, for: .normal)
+           takeHintButton.backgroundColor = .orange // Set orange background color
+           takeHintButton.layer.cornerRadius = 8 // Add rounded corners
+           takeHintButton.addTarget(self, action: #selector(takeHintButtonTapped), for: .touchUpInside)
+           view.addSubview(takeHintButton)
+           
+           NSLayoutConstraint.activate([
+               takeHintButton.topAnchor.constraint(equalTo: inputTextField.bottomAnchor, constant: 20),
+               takeHintButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -view.frame.width/5),
+               takeHintButton.widthAnchor.constraint(equalToConstant: 120), // Set button width
+               takeHintButton.heightAnchor.constraint(equalToConstant: 40) // Set button height
+           ])
         
         let descriptionLabel = UILabel()
            descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -80,6 +102,14 @@ class HangmanVC: UIViewController {
                descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
                descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
            ])
+        
+        view.addSubview(hangImage)
+        
+        hangImage.snp.makeConstraints { make in
+            make.bottom.equalTo(hangmanWordLabel.snp.top).offset(-20)
+            make.centerX.equalToSuperview()
+            make.height.width.equalTo(100)
+        }
         
     }
     

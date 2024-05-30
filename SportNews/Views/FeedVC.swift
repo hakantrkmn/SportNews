@@ -14,7 +14,7 @@ import AppTrackingTransparency
 class FeedVC: UIViewController
 {
     var textLabel = UILabel()
-
+    
     
     var daysLabel = UILabel()
     var hoursLabel = UILabel()
@@ -26,21 +26,25 @@ class FeedVC: UIViewController
     var minutesText = UILabel()
     var secondsText = UILabel()
     
-    let targetDate = "2024-06-14 21:00:00" // euro 2024 first match
+    let targetDate = "2024-06-14 21:00:00"
     
+    let borderLabel = UILabel()
+    
+    let imageView = UIImageView()
+ 
     override func viewDidLoad()
     {
         super.viewDidLoad()
         if #available(iOS 14, *) {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1 ){
                 ATTrackingManager.requestTrackingAuthorization { (status) in
-                    //print("IDFA STATUS: \(status.rawValue)")
                 }
             }
             
         }
         
-       
+        
+        navigationController?.navigationBar.prefersLargeTitles = true
         
         view.backgroundColor = .systemBackground
         daysLabel.textAlignment = .center
@@ -48,12 +52,15 @@ class FeedVC: UIViewController
         minutesLabel.textAlignment = .center
         secondsLabel.textAlignment = .center
         
+    
+        
+        
         daysText.textAlignment = .left
         hoursText.textAlignment = .left
         minutesText.textAlignment = .left
         secondsText.textAlignment = .left
         textLabel.textAlignment = .center
-
+        
         daysLabel.font = .systemFont(ofSize: 45, weight: .bold)
         hoursLabel.font = .systemFont(ofSize: 45, weight: .bold)
         minutesLabel.font = .systemFont(ofSize: 45, weight: .bold)
@@ -63,17 +70,32 @@ class FeedVC: UIViewController
         minutesText.text = "MINUTES"
         secondsText.text = "SECONDS"
         hoursText.text = "HOURS"
-        textLabel.text = "Euro 2024"
-        textLabel.font = .systemFont(ofSize: 50, weight: .bold)
+        textLabel.text = "Next competition starts in :"
+        textLabel.font = .systemFont(ofSize: 30, weight: .bold)
         
-
-        view.addSubiews(views: textLabel,daysLabel,hoursLabel,minutesLabel,secondsLabel,daysText,hoursText,minutesText,secondsText)
+        borderLabel.layer.borderWidth = 1
         
+        imageView.image = UIImage(named: "stad")
+        imageView.contentMode = .scaleAspectFit
+        view.addSubiews(views: textLabel,daysLabel,hoursLabel,minutesLabel,secondsLabel,daysText,hoursText,minutesText,secondsText,borderLabel,imageView)
+        
+        imageView.snp.makeConstraints { make in
+            make.trailing.leading.equalToSuperview().inset(view.frame.width/3)
+            make.top.equalTo(daysLabel.snp.bottom)
+            make.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        borderLabel.snp.makeConstraints { make in
+            make.top.equalTo(daysLabel.snp.top)
+            make.leading.equalTo(daysText.snp.leading)
+            make.trailing.equalTo(secondsText.snp.trailing)
+            make.bottom.equalTo(daysText.snp.bottom)
+        }
         textLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide)
+            //make.top.equalTo(view.safeAreaLayoutGuide)
             make.trailing.leading.equalToSuperview()
-            make.bottom.equalTo(daysLabel.snp.top)
-
+            make.bottom.equalTo(daysLabel.snp.top).offset(-50)
+            
         }
         
         daysLabel.snp.makeConstraints { make in
@@ -110,7 +132,7 @@ class FeedVC: UIViewController
         }
         secondsText.snp.makeConstraints { make in
             make.leading.trailing.equalTo(secondsLabel)
-
+            
             make.top.equalTo(daysLabel.snp.bottom)
         }
         
@@ -120,6 +142,10 @@ class FeedVC: UIViewController
         
         // Call the updateCountdown method immediately to set the initial countdown values
         updateCountdown()
+        
+        view.sendSubviewToBack(borderLabel)
+
+        
         
         
     }

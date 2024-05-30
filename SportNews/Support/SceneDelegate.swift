@@ -27,7 +27,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func createTabBar() -> UITabBarController
     {
         let tabBar = UITabBarController()
-        tabBar.viewControllers = [createFeedVC(),createHitScore(),createNewsVC(),createGuessVC(),createHangmanVC()]
+        tabBar.viewControllers = [createNewsVC(),createTriviaVC(),createFeedVC(),createGuessVC(),createHangmanVC()]
         
         return tabBar
     }
@@ -36,17 +36,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     {
         let nav = FeedVC()
         nav.title = "Countdown"
-        nav.tabBarItem = UITabBarItem(title: "Countdown", image: UIImage(systemName: "clock.fill"), tag: 0)
+        nav.tabBarItem = UITabBarItem(title: "Countdown", image: UIImage(systemName: "clock.fill"), tag: 1)
         nav.tabBarController?.title = "News"
         return UINavigationController(rootViewController: nav)
     }
     
-    func createHitScore() -> UINavigationController
+    func createTriviaVC() -> UINavigationController
     {
-        let nav = HomeVC()
-        nav.title = "Hit Score"
-        nav.tabBarItem = UITabBarItem(title: "Hit Score", image: UIImage(systemName: "clock.fill"), tag: 3)
-        nav.tabBarController?.title = "Hit Score"
+        let nav = TriviaVC()
+        nav.title = "Trivia"
+        nav.tabBarItem = UITabBarItem(title: "Trivia", image: UIImage(systemName: "questionmark.ar"), tag: 0)
+        nav.tabBarController?.title = "Trivia"
         return UINavigationController(rootViewController: nav)
     }
     
@@ -54,16 +54,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     {
         let nav = NewsVC()
         nav.title = "News"
-        nav.tabBarItem = UITabBarItem(title: "News", image: UIImage(systemName: "newspaper"), tag: 1)
+        nav.tabBarItem = UITabBarItem(title: "News", image: UIImage(systemName: "newspaper"), tag: 0)
         nav.tabBarController?.title = "News"
         return UINavigationController(rootViewController: nav)
     }
     
+    
+   
     func createHangmanVC() -> UINavigationController
     {
         let nav = HangmanVC()
         nav.title = "Hangman"
-        nav.tabBarItem = UITabBarItem(title: "Hangman", image: UIImage(systemName: "figure.stand"), tag: 5)
+        nav.tabBarItem = UITabBarItem(title: "Hangman", image: UIImage(systemName: "figure.stand"), tag: 2)
         nav.tabBarController?.title = "Hangman"
         return UINavigationController(rootViewController: nav)
     }
@@ -74,27 +76,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     {
         let nav = GuessPlayerVC()
         nav.title = "Guess"
-        nav.tabBarItem = UITabBarItem(title: "Guess", image: UIImage(systemName:  "questionmark.circle.fill"), tag: 4)
+        nav.tabBarItem = UITabBarItem(title: "Guess", image: UIImage(systemName:  "questionmark.circle.fill"), tag: 3)
         nav.tabBarController?.title = "Guess"
         return UINavigationController(rootViewController: nav)
     }
- 
-    func createGroupsVC() -> UINavigationController
-    {
-        let nav = GroupsVC()
-        nav.title = "Groups"
-        nav.tabBarItem = UITabBarItem( title: "Groups" ,image: UIImage(systemName: "book"), tag: 3)
-        nav.tabBarController?.title = "Groups"
-        return UINavigationController(rootViewController: nav)
-    }
-//    func createSearchVC() -> UINavigationController
-//    {
-//        let nav = SearchVC()
-//        nav.title = "Search Player"
-//        nav.tabBarItem = UITabBarItem( title: "Search Player" ,image: UIImage(systemName: "person"), tag: 1)
-//        nav.tabBarController?.title = "Search Player"
-//        return UINavigationController(rootViewController: nav)
-//    }
 
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
